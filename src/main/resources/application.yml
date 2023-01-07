@@ -1,0 +1,20 @@
+server:
+  port: 17070
+spring:
+  application:
+    name: livestock
+  profiles:
+    active: local
+  config:
+    import: optional:configserver:http://localhost:8888
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
