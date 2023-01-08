@@ -1,7 +1,6 @@
 package com.daily.product.livestock.domain.livestock;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -11,5 +10,17 @@ public class Livestock {
     @Id
     private Long id;
     private Long no;
-    private String name;
+    private String placeCode;
+    private String placeName;
+    private String productCode;
+    private String productName;
+    private String standard;
+    private Long price;
+    private String remarks;
+    private String marketTypeCode;
+    private String marketTypeName;
+    private String autonomousCode;
+    private String autonomousName;
+    private String checkDate;
+
 }

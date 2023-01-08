@@ -9,10 +9,13 @@ spring:
     import: optional:configserver:http://localhost:8888
 
 management:
+  info:
+    java:
+      enabled: true
   endpoints:
     web:
       exposure:
-        include: refresh
+        include: info,health,refresh
 
 eureka:
   client:
