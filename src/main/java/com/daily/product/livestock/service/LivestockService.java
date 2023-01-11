@@ -1,7 +1,7 @@
 package com.daily.product.livestock.service;
 
-import com.daily.product.livestock.domain.livestock.Livestock;
-import com.daily.product.livestock.domain.livestock.LivestockRepository;
+import com.daily.product.livestock.repository.LivestockRepository;
+import com.daily.product.livestock.dto.LivestockResultDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -20,14 +20,15 @@ public class LivestockService {
     private final LivestockRepository livestockRepository;
 
 
-    public Mono<Page<Livestock>> findAll(PageRequest pageRequest) {
+    public Mono<Page<LivestockResultDto>> findAll(PageRequest pageRequest) {
         return livestockRepository.findAllBy(pageRequest.withSort(Sort.by("checkDate").descending()))
+            .map(LivestockResultDto::new)
             .collectList()
             .zipWith(livestockRepository.count())
             .map(t -> new PageImpl<>(t.getT1(), pageRequest, t.getT2()));
     }
 
-    public Mono<Livestock> findById(Long id) {
-        return livestockRepository.findById(id);
+    public Mono<LivestockResultDto> findById(Long id) {
+        return livestockRepository.findById(id).map(LivestockResultDto::new);
     }
 }

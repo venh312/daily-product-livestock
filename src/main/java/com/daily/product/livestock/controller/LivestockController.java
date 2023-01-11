@@ -1,6 +1,6 @@
-package com.daily.product.livestock.web;
+package com.daily.product.livestock.controller;
 
-import com.daily.product.livestock.domain.livestock.Livestock;
+import com.daily.product.livestock.dto.LivestockResultDto;
 import com.daily.product.livestock.service.LivestockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,14 +16,14 @@ public class LivestockController {
     private final LivestockService livestockService;
 
     @GetMapping
-    public Mono<Page<Livestock>> findAll(
+    public Mono<Page<LivestockResultDto>> findAll(
             @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "8") int pageSize) {
+            @RequestParam(required = false, defaultValue = "6") int pageSize) {
         return livestockService.findAll(PageRequest.of(page, pageSize));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Mono<Livestock>> findById(@PathVariable Long id) {
+    public ResponseEntity<Mono<LivestockResultDto>> findById(@PathVariable Long id) {
         return ResponseEntity.ok(livestockService.findById(id));
     }
 }
