@@ -22,5 +22,4 @@ public class Livestock {
     private String autonomousCode;
     private String autonomousName;
     private String checkDate;
-
 }

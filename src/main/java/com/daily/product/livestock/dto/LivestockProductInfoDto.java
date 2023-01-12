@@ -4,25 +4,27 @@ import com.daily.product.livestock.domain.livestock.Livestock;
 import lombok.Getter;
 
 @Getter
-public class LivestockResultDto {
-    private Long id;
+public class LivestockProductInfoDto {
+    private String placeCode;
     private String placeName;
+    private String productCode;
     private String productName;
     private String standard;
     private Long price;
     private String remarks;
-    private String marketTypeName;
+    private String autonomousCode;
     private String autonomousName;
     private String checkDate;
 
-    public LivestockResultDto(Livestock livestock) {
-        this.id = livestock.getId();
+    public LivestockProductInfoDto(Livestock livestock) {
+        this.placeCode = livestock.getPlaceCode();
         this.placeName = livestock.getPlaceName();
+        this.productCode = livestock.getProductCode();
         this.productName = livestock.getProductName();
         this.standard = livestock.getStandard();
         this.price = livestock.getPrice();
         this.remarks = livestock.getRemarks();
-        this.marketTypeName = livestock.getMarketTypeName();
+        this.autonomousCode = livestock.getAutonomousCode();
         this.autonomousName = livestock.getAutonomousName();
         this.checkDate = livestock.getCheckDate();
     }
