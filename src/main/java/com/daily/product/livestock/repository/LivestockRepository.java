@@ -8,14 +8,14 @@ import org.springframework.data.repository.reactive.ReactiveSortingRepository;
 import reactor.core.publisher.Flux;
 
 public interface LivestockRepository extends ReactiveSortingRepository<Livestock, Long> {
-    @Query("SELECT autonomous_code, autonomous_name FROM livestock GROUP BY autonomous_code")
+    @Query("SELECT autonomous_code, autonomous_name FROM livestock GROUP BY autonomous_code, autonomous_name")
     Flux<Livestock> groupByAutonomous();
-    @Query("SELECT place_code, place_name FROM livestock WHERE autonomous_code = :autonomousCode GROUP BY place_code")
+    @Query("SELECT place_code, place_name FROM livestock WHERE autonomous_code = :autonomousCode GROUP BY place_code, place_name")
     Flux<Livestock> findByAutonomousCode(@Param("autonomousCode") String autonomousCode);
-    @Query("SELECT place_code, place_name FROM livestock GROUP BY place_code")
+    @Query("SELECT place_code, place_name FROM livestock GROUP BY place_code, place_name")
     Flux<Livestock> groupByPlace();
     Flux<Livestock> findByPlaceCode(String placeCode, Pageable pageable);
-    @Query("SELECT product_code, product_name FROM livestock GROUP BY product_code")
+    @Query("SELECT product_code, product_name FROM livestock GROUP BY product_code, product_name")
     Flux<Livestock> groupByProduct();
 
     /* 커버링 인덱스 (커버링 인덱스는 NoOffset 기법과 더불어 페이징 조회 성능을 향상시키는 가장 보편적인 방법)
@@ -26,11 +26,11 @@ public interface LivestockRepository extends ReactiveSortingRepository<Livestock
         "group by place_code,standard,check_date \n" +
         "ORDER BY id DESC")
      */
-    @Query("SELECT place_code, place_name, product_code, product_name, standard, " +
-            "price, remarks, autonomous_code, autonomous_name, check_date " +
+    @Query("SELECT place_code, place_name, product_code, ANY_VALUE(product_name) product_name, standard, " +
+            "AVG(price) price, ANY_VALUE(remarks) remarks, autonomous_code, autonomous_name, check_date " +
             "FROM livestock " +
             "WHERE product_code = :productCode " +
-            "GROUP BY place_code, check_date " +
+            "GROUP BY place_code, place_name, product_code, standard, autonomous_code, autonomous_name, check_date " +
             "ORDER BY check_date DESC")
     Flux<Livestock> getProductInfoList(@Param("productCode") String productCode);
 }
