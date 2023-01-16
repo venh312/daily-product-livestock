@@ -6,8 +6,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -20,53 +18,72 @@ import java.util.List;
 public class LivestockController {
     private final LivestockService livestockService;
 
-    @Operation(summary = "[자치구] 목록 조회")
+    @Operation(summary = "[자치구] 목록 조회", description = "서울시 자치구 전체 목록을 불러온다.")
     @GetMapping("/autonomous")
     public ResponseEntity<Mono<List<LivestockGroupByAutonomousDto>>> getAutonomous() {
         return ResponseEntity.ok(livestockService.groupByAutonomous());
     }
 
-    @Operation(summary = "[자치구] 시장/마트 목록 조회")
-    @GetMapping("/autonomous/{autonomousCode}")
+    @Operation(summary = "[자치구] 시장/마트 목록 조회", description = "자치구내에 시장 또는 마트 목록을 불러온다.")
+    @GetMapping("/autonomous/{autonomousCode}/{marketTypeCode}")
     public ResponseEntity<Mono<List<LivestockPlaceDto>>> getPlaceList(
             @Parameter(description = "자치구 코드")
-            @PathVariable String autonomousCode) {
-        return ResponseEntity.ok(livestockService.getPlaceList(autonomousCode));
+            @PathVariable String autonomousCode,
+            @Parameter(description = "마트/시장 구분 코드 1:시장,2:마트")
+            @PathVariable String marketTypeCode) {
+        return ResponseEntity.ok(livestockService.getPlaceList(autonomousCode, marketTypeCode));
     }
 
-    @Operation(summary = "[시장/마트] 목록 조회")
+    @Operation(summary = "[시장/마트] 목록 조회", description = "시장/마트 전체 목록을 조회한다.")
     @GetMapping("/place")
     public ResponseEntity<Mono<List<LivestockGroupByPlaceDto>>> getPlace() {
         return ResponseEntity.ok(livestockService.groupByPlace());
     }
 
-    @Operation(summary = "[시장/마트] 상품 조회")
-    @GetMapping("/place/{placeCode}")
-    public Mono<Page<LivestockPlaceProductDto>> getPlaceProductList(
+    @Operation(summary = "[시장/마트] 상품 조회", description = "자치구내에 시장/마트 코드로 상품을 조회한다.")
+    @GetMapping("/place/{autonomousCode}/{placeCode}")
+    public Mono<List<LivestockProductInfoDto>> getPlaceProductList(
+            @Parameter(description = "자치구 코드")
+            @PathVariable String autonomousCode,
             @Parameter(description = "시장/마트 코드")
             @PathVariable String placeCode,
-            @Parameter(description = "정렬 컬럼 Default: checkDate")
-            @RequestParam(required = false, defaultValue = "id") String sortColumn,
-            @Parameter(description = "정렬 순서 Default:DESC (DESC:내림차순, ASC:오름차순)")
-            @RequestParam(required = false, defaultValue = "DESC") String sortType,
-            @Parameter(description = "페이지 번호 (0:1페이지, 1:2페이지)")
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @Parameter(description = "페이지 사이즈")
-            @RequestParam(required = false, defaultValue = "8") int pageSize) {
-        return livestockService.getPlaceProductList(placeCode, sortColumn, sortType, PageRequest.of(page, pageSize));
+            @Parameter(description = "페이지 크기 Default:8")
+            @RequestParam(required = false, defaultValue = "8") int limit,
+            @Parameter(description = "페이지 번호 Default:0 (Ex.번호*크기, 번호는 0부터 시작)")
+            @RequestParam(required = false, defaultValue = "0") int offset) {
+        return livestockService.getPlaceProductList(autonomousCode, placeCode, limit, offset);
     }
 
-    @Operation(summary = "[상품] 목록 조회")
+    @Operation(summary = "[상품] 목록 조회", description = "전체 상품 목록을 조회한다.")
     @GetMapping("/product")
     public ResponseEntity<Mono<List<LivestockProductDto>>> groupByProduct() {
         return ResponseEntity.ok(livestockService.groupByProduct());
     }
 
-    @Operation(summary = "[상품] 상세 조회")
-    @GetMapping("/product/{productCode}")
+    @Operation(summary = "[상품] 상세 조회", description = "자치구를 기준으로 입력한 상품을 조회한다.")
+    @GetMapping("/product/{autonomousCode}/{productName}")
     public Mono<List<LivestockProductInfoDto>> getProductInfoList(
-            @Parameter(description = "상품 코드")
-            @PathVariable String productCode) {
-        return livestockService.getProductInfoList(productCode);
+            @Parameter(description = "자치구 코드")
+            @PathVariable String autonomousCode,
+            @Parameter(description = "상품 이름")
+            @PathVariable String productName,
+            @Parameter(description = "페이지 크기 Default:8")
+            @RequestParam(required = false, defaultValue = "8") int limit,
+            @Parameter(description = "페이지 번호 Default:0 (Ex.번호*크기, 번호는 0부터 시작)")
+            @RequestParam(required = false, defaultValue = "0") int offset) {
+        return livestockService.getProductInfoList(autonomousCode, productName, limit, offset);
+    }
+    @Operation(summary = "[마트,상품] 검색 조회", description = "자치구를 기준으로 입력한 검색 내역을 조회한다.")
+    @GetMapping("/search/{autonomousCode}/{search}")
+    public Mono<List<LivestockProductInfoDto>> getPlaceOrProductList(
+            @Parameter(description = "자치구 코드")
+            @PathVariable String autonomousCode,
+            @Parameter(description = "검색명")
+            @PathVariable String search,
+            @Parameter(description = "페이지 크기 Default:8")
+            @RequestParam(required = false, defaultValue = "8") int limit,
+            @Parameter(description = "페이지 번호 Default:0 (Ex.번호*크기, 번호는 0부터 시작)")
+            @RequestParam(required = false, defaultValue = "0") int offset) {
+        return livestockService.getPlaceOrProductList(autonomousCode, search, limit, offset);
     }
 }
