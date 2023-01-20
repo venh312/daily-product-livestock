@@ -26,8 +26,8 @@ public class LivestockService {
             .collectList();
     }
 
-    public Mono<List<LivestockPlaceDto>> getPlaceList(String autonomousCode) {
-        return livestockRepository.findByAutonomousCode(autonomousCode)
+    public Mono<List<LivestockPlaceDto>> getPlaceList(String autonomousCode, String marketTypeCode) {
+        return livestockRepository.getPlaceList(autonomousCode, marketTypeCode)
             .map(LivestockPlaceDto::new)
             .collectList();
     }
@@ -38,18 +38,10 @@ public class LivestockService {
             .collectList();
     }
 
-    public Mono<Page<LivestockPlaceProductDto>> getPlaceProductList(String placeCode, String sortColumn, String sortType, PageRequest pageRequest) {
-        Sort sort = null;
-        if ("DESC".equals(sortType))
-            sort = Sort.by(sortColumn).descending();
-        else if ("ASC".equals(sortType))
-            sort = Sort.by(sortColumn).ascending();
-
-        return livestockRepository.findByPlaceCode(placeCode, pageRequest.withSort(sort))
-            .map(LivestockPlaceProductDto::new)
-            .collectList()
-            .zipWith(livestockRepository.count())
-            .map(t -> new PageImpl<>(t.getT1(), pageRequest, t.getT2()));
+    public Mono<List<LivestockProductInfoDto>> getPlaceProductList(String autonomousCode, String placeCode, int limit, int offset) {
+        return livestockRepository.getPlaceProductList(autonomousCode, placeCode, limit, offset)
+            .map(LivestockProductInfoDto::new)
+            .collectList();
     }
 
     public Mono<List<LivestockProductDto>> groupByProduct() {
@@ -58,8 +50,14 @@ public class LivestockService {
             .collectList();
     }
 
-    public Mono<List<LivestockProductInfoDto>> getProductInfoList(String productCode) {
-        return livestockRepository.getProductInfoList(productCode)
+    public Mono<List<LivestockProductInfoDto>> getProductInfoList(String autonomousCode, String productName, int limit, int offset) {
+        return livestockRepository.getProductInfoList(autonomousCode, productName, limit, offset)
+            .map(LivestockProductInfoDto::new)
+            .collectList();
+    }
+
+    public Mono<List<LivestockProductInfoDto>> getPlaceOrProductList(String autonomousCode, String search, int limit, int offset) {
+        return livestockRepository.getPlaceOrProductList(autonomousCode, search, limit, offset)
             .map(LivestockProductInfoDto::new)
             .collectList();
     }
