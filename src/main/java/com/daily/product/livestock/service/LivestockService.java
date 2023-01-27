@@ -3,7 +3,6 @@ package com.daily.product.livestock.service;
 import com.daily.product.livestock.dto.*;
 import com.daily.product.livestock.repository.LivestockRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;

@@ -14,11 +14,11 @@ public interface LivestockRepository extends ReactiveSortingRepository<Livestock
     @Query("SELECT place_code, place_name FROM livestock GROUP BY place_code, place_name")
     Flux<Livestock> groupByPlace();
 
-    @Query("SELECT place_code, ANY_VALUE(place_name) place_name, ANY_VALUE(product_code) product_code, ANY_VALUE(product_name) product_name, standard, " +
+    @Query("SELECT ANY_VALUE(place_code) place_code, ANY_VALUE(place_name) place_name, product_code, ANY_VALUE(product_name) product_name, standard, " +
             "AVG(price) price, remarks, ANY_VALUE(autonomous_code) autonomous_code, ANY_VALUE(autonomous_name) autonomous_name, check_date " +
             "FROM livestock " +
             "WHERE autonomous_code = :autonomousCode AND place_code = :placeCode " +
-            "GROUP BY place_code, standard, remarks, check_date " +
+            "GROUP BY product_code, standard, remarks, check_date " +
             "ORDER BY check_date DESC, price ASC LIMIT :limit OFFSET :offset")
     Flux<Livestock> getPlaceProductList(@Param("autonomousCode") String autonomousCode, @Param("placeCode") String placeCode, @Param("limit") int limit, @Param("offset") int offset);
 
