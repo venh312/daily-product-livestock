@@ -24,7 +24,7 @@ public class LivestockController {
         return ResponseEntity.ok(livestockService.groupByAutonomous());
     }
 
-    @Operation(summary = "[자치구] 시장/마트 목록 조회", description = "자치구내에 시장 또는 마트 목록을 불러온다.")
+    @Operation(summary = "[자치구] 시장/마트 목록 조회", description = "자치구에 해당되는 시장 또는 마트 목록을 불러온다.")
     @GetMapping("/autonomous/{autonomousCode}/{marketTypeCode}")
     public ResponseEntity<Mono<List<LivestockPlaceDto>>> getPlaceList(
             @Parameter(description = "자치구 코드")
