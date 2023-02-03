@@ -23,9 +23,6 @@
 ## Microservices Architecture
 ![BE  전체구조](https://user-images.githubusercontent.com/13326651/213702803-65d7a5fd-4ec3-4c7c-b4cd-cbf66a8f21af.png)
 
-## Server Side Discovery
-서비스를 사용할 클라이언트와 Service Registry 사이에 Load Balancer(현 프로젝트에서는 SC Gateway가 역할 수행)를 두고 Service Registry에 호출할 서비스의 위치를 질의하는 방식
-
 ## Srping MVC
 동기적으로 동작하는 블로킹으로 사용자 요청이 들어올때마다 스레드를 생성해서 처리한다. 요청당 스레드를 생성하기 때문에 이를 방지 하기 위해서 스레드풀을 만들어서 사용한다
 이 동작의 단점은 스레드풀을 초과하는 요청이 왔을때는 큐에 요청이 쌓여 지연되는 상황이 발생한다. 이 문제를 아래 WebFlux에서 해결한다.
@@ -42,10 +39,10 @@ JPA 기본적으로 비동기를 제공하지 않는다. 즉, Webflux 기반에�
 ![mvc,webflux](https://user-images.githubusercontent.com/13326651/213714186-b4c7de56-8dd7-4f0c-96da-fc3d3be4fca1.png)
 
 ## Distribution
-java -jar -DSpring.profiles.active=[profiles-dev] [build.jar]
+```$ java -jar -DSpring.profiles.active=[profiles-dev] [build.jar]```
 
 ## option (no hang up &)
-nohup java -jar -DSpring.profiles.active=[profile-env] [build.jar] &
+```$ nohup java -jar -DSpring.profiles.active=[profile-env] [build.jar] &```
 
 ## Reference
 - https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html
