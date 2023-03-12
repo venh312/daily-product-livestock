@@ -17,8 +17,8 @@
 - Gateway (Filter, Load balancing)
 - WebFlux non-blocking system (Product)
 - GitHub Config Server (Properties)
-- Docker Container (Redis)
-- Docker Container (MySQL Master/Slave)
+- Docker Image (Redis)
+- Docker Image (MySQL Master/Slave)
 
 ## Microservices Architecture
 ![BE  전체구조](https://user-images.githubusercontent.com/13326651/213702803-65d7a5fd-4ec3-4c7c-b4cd-cbf66a8f21af.png)
