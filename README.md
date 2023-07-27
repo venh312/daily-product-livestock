@@ -45,6 +45,6 @@ JPA 기본적으로 비동기를 제공하지 않는다. 즉, Webflux 기반에�
 ```$ nohup java -jar -DSpring.profiles.active=[profile-env] [build.jar] &```
 
 ## Reference
-- https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html
+- https://spring.io/reactive
 - https://heeyeah.github.io/spring/2020-02-29-web-flux/
 - https://binux.tistory.com/154
